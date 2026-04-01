@@ -355,6 +355,15 @@ document.addEventListener("keydown", (event) => {
   revealLightboxUi();
 });
 
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 let activeFilter = "all";
 
 function filterGallery(tag) {
@@ -362,23 +371,14 @@ function filterGallery(tag) {
   const filtered = tag === "all"
     ? galleryImages
     : galleryImages.filter((img) => img.tags && img.tags.includes(tag));
-  renderGallery(filtered);
+  renderGallery(shuffleArray(filtered));
 }
 
-const filterBar = document.getElementById("filterBar");
-if (filterBar) {
-  filterBar.addEventListener("click", (event) => {
-    const btn = event.target.closest(".filter-btn");
-    if (!btn) return;
-    const tag = btn.dataset.filter;
-    filterBar.querySelectorAll(".filter-btn").forEach((b) => {
-      b.classList.remove("active");
-      b.setAttribute("aria-selected", "false");
-    });
-    btn.classList.add("active");
-    btn.setAttribute("aria-selected", "true");
-    filterGallery(tag);
+const filterDropdown = document.getElementById("filterDropdown");
+if (filterDropdown) {
+  filterDropdown.addEventListener("change", (event) => {
+    filterGallery(event.target.value);
   });
 }
 
-renderGallery(galleryImages);
+renderGallery(shuffleArray(galleryImages));

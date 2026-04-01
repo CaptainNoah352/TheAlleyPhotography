@@ -167,35 +167,28 @@ p {
   max-width: none;
 }
 
-.filter-bar {
+.portfolio-header {
   display: flex;
-  justify-content: center;
-  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 40px;
-  flex-wrap: wrap;
 }
 
-.filter-btn {
+.portfolio-header h2 {
+  margin: 0;
+}
+
+.filter-dropdown {
   padding: 8px 20px;
   border: 2px solid var(--accent, #b08968);
-  background: transparent;
+  background: var(--bg, #fff);
   color: var(--text, #3e3529);
   border-radius: 999px;
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.25s ease, color 0.25s ease;
-}
-
-.filter-btn:hover {
-  background: var(--accent, #b08968);
-  color: #fff;
-}
-
-.filter-btn.active {
-  background: var(--accent, #b08968);
-  color: #fff;
+  appearance: auto;
 }
 
 .gallery {
