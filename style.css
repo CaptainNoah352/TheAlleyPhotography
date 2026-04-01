@@ -22,7 +22,9 @@ html {
 
 body {
   margin: 0;
-  font-family: "Source Sans 3", "Manrope", Arial, sans-serif;
+  font-family: "Poppins", "Source Sans 3", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
   color: var(--text);
   background: var(--bg);
   line-height: 1.7;
@@ -92,7 +94,7 @@ p {
   position: relative;
   z-index: 100;
   background: var(--bg);
-  border-bottom: 1px solid rgba(138, 100, 66, 0.18);
+  border-bottom: none;
   padding-left: clamp(1.5rem, 3vw, 3rem);
   padding-right: clamp(1.5rem, 3vw, 3rem);
 }
