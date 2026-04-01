@@ -213,7 +213,7 @@ p {
 .gallery {
   width: 100%;
   column-count: 3;
-  column-gap: 42px;
+  column-gap: 28px;
 }
 
 .gallery-item {
@@ -226,7 +226,7 @@ p {
   cursor: zoom-in;
   display: inline-block;
   width: 100%;
-  margin-bottom: 42px;
+  margin-bottom: 28px;
   break-inside: avoid;
 }
 
@@ -713,6 +713,11 @@ p {
 @media (max-width: 1024px) {
   .gallery {
     column-count: 2;
+    column-gap: 18px;
+  }
+
+  .gallery-item {
+    margin-bottom: 18px;
   }
 
   .contact-grid {
@@ -748,11 +753,11 @@ p {
 
   .gallery {
     column-count: 2;
-    column-gap: 16px;
+    column-gap: 10px;
   }
 
   .gallery-item {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
 
   .lightbox {
