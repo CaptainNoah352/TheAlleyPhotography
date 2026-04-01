@@ -760,6 +760,10 @@ p {
     padding: 4rem 0;
   }
 
+  .portfolio-header {
+    margin-bottom: 6px;
+  }
+
   .gallery {
     column-count: 2;
     column-gap: 6px;
