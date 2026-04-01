@@ -234,30 +234,47 @@ const revealObserver = "IntersectionObserver" in window
     )
   : null;
 
-const imageObserver = "IntersectionObserver" in window
+function loadGalleryImage(imageNode) {
+  if (!imageNode || !imageNode.dataset.src) return;
+  imageNode.src = imageNode.dataset.src;
+  imageNode.removeAttribute("data-src");
+}
+
+function revealGalleryRow(rowAnchor) {
+  if (!rowAnchor || !gallery) return;
+  const rowTop = rowAnchor.offsetTop;
+  const rowTolerance = 14;
+  const rowItems = Array.from(gallery.querySelectorAll(".gallery-item")).filter((item) => {
+    return Math.abs(item.offsetTop - rowTop) <= rowTolerance;
+  });
+
+  rowItems.forEach((item) => {
+    item.classList.add("is-revealed");
+    const imageNode = item.querySelector("img");
+    loadGalleryImage(imageNode);
+    if (galleryRowObserver) {
+      galleryRowObserver.unobserve(item);
+    }
+  });
+}
+
+const galleryRowObserver = "IntersectionObserver" in window
   ? new IntersectionObserver(
-      (entries, observer) => {
+      (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          const imageNode = entry.target;
-          if (!imageNode.dataset.src) {
-            observer.unobserve(imageNode);
-            return;
-          }
-          imageNode.src = imageNode.dataset.src;
-          imageNode.removeAttribute("data-src");
-          observer.unobserve(imageNode);
+          revealGalleryRow(entry.target);
         });
       },
       {
-        rootMargin: "220px 0px",
-        threshold: 0.01,
+        rootMargin: "0px 0px -10% 0px",
+        threshold: 0.2,
       }
     )
   : null;
 
 function initializeScrollReveal() {
-  const revealTargets = document.querySelectorAll(".scroll-reveal, .gallery-item");
+  const revealTargets = document.querySelectorAll(".scroll-reveal");
   revealTargets.forEach((node, index) => {
     node.style.transitionDelay = `${Math.min(index * 40, 240)}ms`;
     if (revealObserver) {
@@ -404,16 +421,11 @@ function renderGallery(images) {
     article.appendChild(img);
     gallery.appendChild(article);
 
-    if (revealObserver) {
-      revealObserver.observe(article);
+    if (galleryRowObserver) {
+      galleryRowObserver.observe(article);
     } else {
       article.classList.add("is-revealed");
-    }
-
-    if (imageObserver) {
-      imageObserver.observe(img);
-    } else {
-      img.src = image.src;
+      loadGalleryImage(img);
     }
   });
 }
