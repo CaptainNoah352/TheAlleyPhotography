@@ -298,6 +298,7 @@ p {
   position: absolute;
   top: clamp(1rem, 3vw, 2rem);
   right: clamp(1rem, 3vw, 2rem);
+  z-index: 2;
   border: 0;
   background: transparent;
   color: #000;
@@ -309,6 +310,8 @@ p {
 }
 
 .mobile-menu-nav {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
