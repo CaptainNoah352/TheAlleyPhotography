@@ -22,7 +22,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Manrope", "Inter", Arial, sans-serif;
+  font-family: "Source Sans 3", "Manrope", Arial, sans-serif;
   color: var(--text);
   background: var(--bg);
   line-height: 1.7;
@@ -61,16 +61,16 @@ h2,
 h3 {
   margin-top: 0;
   line-height: 1.2;
-  font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  font-family: "Libre Baskerville", Georgia, serif;
 }
 
 h1 {
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
   margin-bottom: 1rem;
 }
 
 h2 {
-  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
   margin-bottom: 0.8rem;
 }
 
@@ -98,6 +98,8 @@ p {
   backdrop-filter: blur(8px);
   background: color-mix(in srgb, var(--bg) 88%, white 12%);
   border-bottom: 1px solid rgba(138, 100, 66, 0.18);
+  padding-left: clamp(1.5rem, 3vw, 3rem);
+  padding-right: clamp(1.5rem, 3vw, 3rem);
 }
 
 .header-inner {
@@ -111,9 +113,9 @@ p {
 .logo {
   display: inline-block;
   color: var(--earth);
-  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-family: "Libre Baskerville", Georgia, serif;
   text-decoration: none;
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
   font-weight: 700;
   letter-spacing: 0.01em;
 }
@@ -299,6 +301,8 @@ p {
   border-top: 1px solid rgba(138, 100, 66, 0.24);
   background: var(--bg-soft);
   padding: 2rem 0;
+  padding-left: clamp(1.5rem, 3vw, 3rem);
+  padding-right: clamp(1.5rem, 3vw, 3rem);
 }
 
 .footer-inner {
