@@ -24,17 +24,15 @@
     <main>
       <section id="portfolio" class="section-padding" aria-labelledby="portfolio-title">
         <div class="container">
-          <div class="section-heading text-container">
+          <div class="portfolio-header">
             <h2 id="portfolio-title">Portfolio</h2>
-            </p>
-          </div>
-
-          <div class="filter-bar" id="filterBar" role="tablist" aria-label="Filter photos by category">
-            <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
-            <button class="filter-btn" data-filter="wildlife" role="tab" aria-selected="false">Wildlife</button>
-            <button class="filter-btn" data-filter="landscape" role="tab" aria-selected="false">Landscape</button>
-            <button class="filter-btn" data-filter="portrait" role="tab" aria-selected="false">Portrait</button>
-            <button class="filter-btn" data-filter="street" role="tab" aria-selected="false">Street</button>
+            <select class="filter-dropdown" id="filterDropdown" aria-label="Filter photos by category">
+              <option value="all">All</option>
+              <option value="wildlife">Wildlife</option>
+              <option value="landscape">Landscape</option>
+              <option value="portrait">Portrait</option>
+              <option value="street">Street</option>
+            </select>
           </div>
 
           <div class="gallery" id="gallery" aria-live="polite"></div>

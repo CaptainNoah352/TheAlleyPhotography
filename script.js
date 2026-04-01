@@ -374,19 +374,10 @@ function filterGallery(tag) {
   renderGallery(shuffleArray(filtered));
 }
 
-const filterBar = document.getElementById("filterBar");
-if (filterBar) {
-  filterBar.addEventListener("click", (event) => {
-    const btn = event.target.closest(".filter-btn");
-    if (!btn) return;
-    const tag = btn.dataset.filter;
-    filterBar.querySelectorAll(".filter-btn").forEach((b) => {
-      b.classList.remove("active");
-      b.setAttribute("aria-selected", "false");
-    });
-    btn.classList.add("active");
-    btn.setAttribute("aria-selected", "true");
-    filterGallery(tag);
+const filterDropdown = document.getElementById("filterDropdown");
+if (filterDropdown) {
+  filterDropdown.addEventListener("change", (event) => {
+    filterGallery(event.target.value);
   });
 }
 
