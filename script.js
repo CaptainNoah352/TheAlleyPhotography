@@ -1,5 +1,6 @@
 const menuToggle = document.getElementById("menuToggle");
 const mobileMenu = document.getElementById("mobileMenu");
+const mobileMenuClose = document.getElementById("mobileMenuClose");
 const yearNode = document.getElementById("year");
 const gallery = document.getElementById("gallery");
 
@@ -59,6 +60,12 @@ if (menuToggle && mobileMenu) {
     });
   });
 
+  if (mobileMenuClose) {
+    mobileMenuClose.addEventListener("click", () => {
+      closeMobileMenu();
+    });
+  }
+
   // Focus trap inside mobile menu
   mobileMenu.addEventListener("keydown", (event) => {
     if (event.key !== "Tab") return;
@@ -78,6 +85,12 @@ if (menuToggle && mobileMenu) {
     }
   });
 }
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && isMobileMenuOpen()) {
+    closeMobileMenu();
+  }
+});
 
 /* ── Active nav link highlighting ── */
 
