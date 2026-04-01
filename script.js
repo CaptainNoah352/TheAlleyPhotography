@@ -71,6 +71,42 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80",
     alt: "Portrait with soft earthy styling",
   },
+  {
+    src: "https://live.staticflickr.com/65535/55180059677_8fc0e9a570_b.jpg",
+    alt: "Portfolio photo",
+  },
+  {
+    src: "https://live.staticflickr.com/65535/55181351100_e841fd38d4_b.jpg",
+    alt: "Portfolio photo",
+  },
+  {
+    src: "https://live.staticflickr.com/65535/55180946771_7b699ca1e8_b.jpg",
+    alt: "Portfolio photo",
+  },
+  {
+    src: "https://live.staticflickr.com/65535/55181203194_3b584271e8_b.jpg",
+    alt: "Portfolio photo",
+  },
+  {
+    src: "https://live.staticflickr.com/65535/55180946701_05cf5ec6e0_b.jpg",
+    alt: "Portfolio photo",
+  },
+  {
+    src: "https://live.staticflickr.com/65535/55181350900_a9998e3d82_b.jpg",
+    alt: "Portfolio photo",
+  },
+  {
+    src: "https://live.staticflickr.com/65535/55180946621_427764f2e8_b.jpg",
+    alt: "Portfolio photo",
+  },
+  {
+    src: "https://live.staticflickr.com/65535/55180059172_6dded42ee8_b.jpg",
+    alt: "Portfolio photo",
+  },
+  {
+    src: "https://live.staticflickr.com/65535/55180946491_8a427c0ca1_b.jpg",
+    alt: "Portfolio photo",
+  },
 ];
 
 let availableLightboxItems = [];
