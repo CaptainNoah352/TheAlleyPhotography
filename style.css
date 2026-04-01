@@ -168,7 +168,7 @@ p {
 .gallery {
   width: 100%;
   column-count: 3;
-  column-gap: 24px;
+  column-gap: 42px;
 }
 
 .gallery-item {
@@ -181,7 +181,7 @@ p {
   cursor: zoom-in;
   display: inline-block;
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 42px;
   break-inside: avoid;
 }
 
@@ -693,7 +693,12 @@ p {
   }
 
   .gallery {
-    column-count: 1;
+    column-count: 2;
+    column-gap: 16px;
+  }
+
+  .gallery-item {
+    margin-bottom: 16px;
   }
 
   .lightbox {
