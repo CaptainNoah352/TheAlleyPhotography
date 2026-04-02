@@ -98,55 +98,63 @@
 
           <div class="admin-card">
             <h2>Editable Site Content</h2>
+            <p class="admin-card-intro">These fields map directly to the text shown on the live website. Existing homepage copy is preloaded so you can edit from there.</p>
             <form id="siteContentForm" class="admin-form admin-grid-form">
-              <label>About intro
-                <textarea id="setting_about_intro" rows="2"></textarea>
-              </label>
-              <label>About paragraph 1
-                <textarea id="setting_about_paragraph_1" rows="4"></textarea>
-              </label>
-              <label>About paragraph 2
-                <textarea id="setting_about_paragraph_2" rows="4"></textarea>
-              </label>
-              <label>About pullquote
-                <textarea id="setting_about_pullquote" rows="2"></textarea>
-              </label>
-              <label>About paragraph 3
-                <textarea id="setting_about_paragraph_3" rows="4"></textarea>
-              </label>
-              <label>About paragraph 4
-                <textarea id="setting_about_paragraph_4" rows="4"></textarea>
-              </label>
-              <label>About paragraph 5
-                <textarea id="setting_about_paragraph_5" rows="4"></textarea>
-              </label>
-              <label>Contact title
-                <input id="setting_contact_title" type="text" />
-              </label>
-              <label>Contact subtitle
-                <textarea id="setting_contact_subtitle" rows="3"></textarea>
-              </label>
-              <label>Contact email
-                <input id="setting_contact_email" type="email" />
-              </label>
-              <label>Instagram URL
-                <input id="setting_instagram_url" type="url" />
-              </label>
-              <label>Instagram label
-                <input id="setting_instagram_label" type="text" />
-              </label>
-              <label>Flickr URL
-                <input id="setting_flickr_url" type="url" />
-              </label>
-              <label>Location text
-                <input id="setting_location_text" type="text" />
-              </label>
-              <label>Availability text
-                <input id="setting_availability_text" type="text" />
-              </label>
-              <label>Response time text
-                <input id="setting_response_time_text" type="text" />
-              </label>
+              <fieldset class="admin-fieldset">
+                <legend>About section</legend>
+                <label>About intro
+                  <textarea id="setting_about_intro" rows="2"></textarea>
+                </label>
+                <label>About paragraph 1
+                  <textarea id="setting_about_paragraph_1" rows="4"></textarea>
+                </label>
+                <label>About paragraph 2
+                  <textarea id="setting_about_paragraph_2" rows="4"></textarea>
+                </label>
+                <label>About pullquote
+                  <textarea id="setting_about_pullquote" rows="2"></textarea>
+                </label>
+                <label>About paragraph 3
+                  <textarea id="setting_about_paragraph_3" rows="4"></textarea>
+                </label>
+                <label>About paragraph 4
+                  <textarea id="setting_about_paragraph_4" rows="4"></textarea>
+                </label>
+                <label>About paragraph 5
+                  <textarea id="setting_about_paragraph_5" rows="4"></textarea>
+                </label>
+              </fieldset>
+
+              <fieldset class="admin-fieldset">
+                <legend>Contact section</legend>
+                <label>Contact title
+                  <input id="setting_contact_title" type="text" />
+                </label>
+                <label>Contact subtitle
+                  <textarea id="setting_contact_subtitle" rows="3"></textarea>
+                </label>
+                <label>Contact email
+                  <input id="setting_contact_email" type="email" />
+                </label>
+                <label>Instagram URL
+                  <input id="setting_instagram_url" type="url" />
+                </label>
+                <label>Instagram label
+                  <input id="setting_instagram_label" type="text" />
+                </label>
+                <label>Flickr URL
+                  <input id="setting_flickr_url" type="url" />
+                </label>
+                <label>Location text
+                  <input id="setting_location_text" type="text" />
+                </label>
+                <label>Availability text
+                  <input id="setting_availability_text" type="text" />
+                </label>
+                <label>Response time text
+                  <input id="setting_response_time_text" type="text" />
+                </label>
+              </fieldset>
               <div class="admin-form-actions">
                 <button id="saveSiteContentBtn" class="admin-btn" type="submit">Save Site Content</button>
               </div>
