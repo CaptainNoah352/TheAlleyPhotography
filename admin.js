@@ -31,6 +31,8 @@ const dom = {
   collectionList: document.getElementById("collectionList"),
   appearanceForm: document.getElementById("appearanceForm"),
   settingsForm: document.getElementById("settingsForm"),
+  resetAppearanceBtn: document.getElementById("resetAppearanceBtn"),
+  appearanceContrastWarning: document.getElementById("appearanceContrastWarning"),
 };
 
 const fields = {
@@ -67,6 +69,15 @@ const siteSettingFields = {
   lightbox_show_captions: document.getElementById("setting_lightbox_show_captions"),
   lightbox_show_counter: document.getElementById("setting_lightbox_show_counter"),
   lightbox_bg_opacity: document.getElementById("setting_lightbox_bg_opacity"),
+  site_bg: document.getElementById("setting_site_bg"),
+  header_bg: document.getElementById("setting_header_bg"),
+  header_text: document.getElementById("setting_header_text"),
+  footer_bg: document.getElementById("setting_footer_bg"),
+  footer_text: document.getElementById("setting_footer_text"),
+  nav_icon: document.getElementById("setting_nav_icon"),
+  body_text: document.getElementById("setting_body_text"),
+  filter_icon: document.getElementById("setting_filter_icon"),
+  accent_color: document.getElementById("setting_accent_color"),
   contact_title: document.getElementById("setting_contact_title"),
   contact_subtitle: document.getElementById("setting_contact_subtitle"),
   contact_email: document.getElementById("setting_contact_email"),
@@ -81,6 +92,26 @@ const siteSettingFields = {
 };
 
 const tabLabels = { photos: "Photos", collections: "Collections", appearance: "Appearance", settings: "Settings" };
+const HEX_COLOR_PATTERN = /^#[0-9A-F]{6}$/i;
+const APPEARANCE_COLOR_DEFAULTS = {
+  site_bg: "#FFFFFF",
+  header_bg: "#FFFFFF",
+  header_text: "#2F2923",
+  footer_bg: "#F5F5F5",
+  footer_text: "#62584D",
+  nav_icon: "#4E5848",
+  body_text: "#2F2923",
+  filter_icon: "#5F6F52",
+  accent_color: "#8A6442",
+};
+const APPEARANCE_COLOR_CONTROLS = Object.keys(APPEARANCE_COLOR_DEFAULTS).reduce((acc, key) => {
+  acc[key] = {
+    hex: document.getElementById(`setting_${key}`),
+    picker: document.getElementById(`setting_${key}_picker`),
+    swatch: document.getElementById(`setting_${key}_swatch`),
+  };
+  return acc;
+}, {});
 
 const state = {
   allPhotos: [],
@@ -89,6 +120,35 @@ const state = {
   dragSourceId: "",
   dragCollectionSlug: "",
 };
+
+function normalizeHexColor(value, fallback = "#000000") {
+  const normalized = (value || "").toString().trim().toUpperCase();
+  return HEX_COLOR_PATTERN.test(normalized) ? normalized : fallback;
+}
+
+function hexToRgb(hex) {
+  const color = normalizeHexColor(hex, "#000000").slice(1);
+  return {
+    r: Number.parseInt(color.slice(0, 2), 16),
+    g: Number.parseInt(color.slice(2, 4), 16),
+    b: Number.parseInt(color.slice(4, 6), 16),
+  };
+}
+
+function getRelativeLuminance(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  const convert = (channel) => {
+    const srgb = channel / 255;
+    return srgb <= 0.03928 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * convert(r) + 0.7152 * convert(g) + 0.0722 * convert(b);
+}
+
+function contrastRatio(a, b) {
+  const lighter = Math.max(getRelativeLuminance(a), getRelativeLuminance(b));
+  const darker = Math.min(getRelativeLuminance(a), getRelativeLuminance(b));
+  return (lighter + 0.05) / (darker + 0.05);
+}
 
 function showMessage(text, type = "") {
   if (!dom.adminMessage) return;
@@ -366,6 +426,7 @@ function collectSettings(formType) {
       "site_title", "site_intro_text", "heading_font", "body_font", "theme_primary_color", "theme_accent_color",
       "dark_mode_behavior", "header_layout", "desktop_columns", "mobile_columns", "desktop_grid_gap", "mobile_grid_gap",
       "keep_original_ratio", "lightbox_show_arrows", "lightbox_arrow_position", "lightbox_show_captions", "lightbox_show_counter", "lightbox_bg_opacity",
+      "site_bg", "header_bg", "header_text", "footer_bg", "footer_text", "nav_icon", "body_text", "filter_icon", "accent_color",
     ],
     settings: [
       "contact_title", "contact_subtitle", "contact_email", "instagram_url", "instagram_label", "flickr_url", "location_text",
@@ -376,7 +437,12 @@ function collectSettings(formType) {
   return (keysByForm[formType] || []).reduce((values, key) => {
     const node = siteSettingFields[key];
     if (!node) return values;
-    values[key] = node.type === "checkbox" ? String(node.checked) : (node.value || "").trim();
+    if (node.type === "checkbox") {
+      values[key] = String(node.checked);
+      return values;
+    }
+    const rawValue = (node.value || "").trim();
+    values[key] = APPEARANCE_COLOR_DEFAULTS[key] ? normalizeHexColor(rawValue, APPEARANCE_COLOR_DEFAULTS[key]) : rawValue;
     return values;
   }, {});
 }
@@ -385,9 +451,42 @@ function fillSiteSettingsForm(settings) {
   Object.entries(siteSettingFields).forEach(([key, node]) => {
     if (!node) return;
     const raw = settings[key] ?? "";
-    if (node.type === "checkbox") node.checked = stringToBool(raw);
-    else node.value = raw;
+    if (node.type === "checkbox") {
+      node.checked = stringToBool(raw);
+      return;
+    }
+    node.value = APPEARANCE_COLOR_DEFAULTS[key] ? normalizeHexColor(raw, APPEARANCE_COLOR_DEFAULTS[key]) : raw;
   });
+  refreshAppearanceColorControls();
+  updateAppearanceReadabilityWarning();
+}
+
+function refreshAppearanceColorControls() {
+  Object.entries(APPEARANCE_COLOR_CONTROLS).forEach(([key, controls]) => {
+    if (!controls.hex || !controls.picker || !controls.swatch) return;
+    const normalized = normalizeHexColor(controls.hex.value, APPEARANCE_COLOR_DEFAULTS[key]);
+    controls.hex.value = normalized;
+    controls.picker.value = normalized;
+    controls.swatch.style.backgroundColor = normalized;
+    controls.hex.setAttribute("aria-invalid", String(!HEX_COLOR_PATTERN.test((controls.hex.value || "").trim())));
+  });
+}
+
+function updateAppearanceReadabilityWarning() {
+  if (!dom.appearanceContrastWarning) return;
+  const combos = [
+    { bg: siteSettingFields.header_bg?.value, text: siteSettingFields.header_text?.value, label: "Header background/text" },
+    { bg: siteSettingFields.footer_bg?.value, text: siteSettingFields.footer_text?.value, label: "Footer background/text" },
+    { bg: siteSettingFields.site_bg?.value, text: siteSettingFields.body_text?.value, label: "Site background/body text" },
+  ];
+  const warnings = combos
+    .map((pair) => {
+      const ratio = contrastRatio(pair.bg, pair.text);
+      return ratio < 4.5 ? `${pair.label} contrast is low (${ratio.toFixed(2)}:1).` : "";
+    })
+    .filter(Boolean);
+  dom.appearanceContrastWarning.textContent = warnings.join(" ");
+  dom.appearanceContrastWarning.hidden = warnings.length === 0;
 }
 
 async function loadSiteSettings() {
@@ -404,6 +503,39 @@ function setupTabNavigation() {
       document.querySelectorAll(".admin-panel").forEach((panel) => {
         panel.hidden = panel.dataset.panel !== active;
       });
+    });
+  });
+}
+
+function setupAppearanceColorControls() {
+  Object.entries(APPEARANCE_COLOR_CONTROLS).forEach(([key, controls]) => {
+    if (!controls.hex || !controls.picker || !controls.swatch) return;
+
+    controls.hex.addEventListener("input", () => {
+      const entered = (controls.hex.value || "").trim();
+      const isValid = HEX_COLOR_PATTERN.test(entered);
+      controls.hex.setAttribute("aria-invalid", String(!isValid));
+      if (isValid) {
+        const normalized = normalizeHexColor(entered, APPEARANCE_COLOR_DEFAULTS[key]);
+        controls.hex.value = normalized;
+        controls.picker.value = normalized;
+        controls.swatch.style.backgroundColor = normalized;
+        updateAppearanceReadabilityWarning();
+      }
+    });
+
+    controls.hex.addEventListener("blur", () => {
+      controls.hex.value = normalizeHexColor(controls.hex.value, APPEARANCE_COLOR_DEFAULTS[key]);
+      refreshAppearanceColorControls();
+      updateAppearanceReadabilityWarning();
+    });
+
+    controls.picker.addEventListener("input", () => {
+      const normalized = normalizeHexColor(controls.picker.value, APPEARANCE_COLOR_DEFAULTS[key]);
+      controls.hex.value = normalized;
+      controls.swatch.style.backgroundColor = normalized;
+      controls.hex.setAttribute("aria-invalid", "false");
+      updateAppearanceReadabilityWarning();
     });
   });
 }
@@ -494,6 +626,7 @@ async function initializeAdmin() {
 }
 
 setupTabNavigation();
+setupAppearanceColorControls();
 
 dom.loginForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -739,10 +872,28 @@ dom.collectionList?.addEventListener("drop", async (event) => {
 dom.appearanceForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
+    refreshAppearanceColorControls();
+    updateAppearanceReadabilityWarning();
     await window.photoDataApi.saveSiteSettings(collectSettings("appearance"));
     showMessage("Appearance settings saved.", "success");
   } catch (error) {
     showMessage(error.message || "Unable to save appearance settings.", "error");
+  }
+});
+
+dom.resetAppearanceBtn?.addEventListener("click", async () => {
+  Object.entries(APPEARANCE_COLOR_DEFAULTS).forEach(([key, value]) => {
+    const node = siteSettingFields[key];
+    if (node) node.value = value;
+  });
+  refreshAppearanceColorControls();
+  updateAppearanceReadabilityWarning();
+
+  try {
+    await window.photoDataApi.saveSiteSettings({ ...APPEARANCE_COLOR_DEFAULTS });
+    showMessage("Appearance colors reset to defaults.", "success");
+  } catch (error) {
+    showMessage(error.message || "Unable to reset appearance defaults.", "error");
   }
 });
 
