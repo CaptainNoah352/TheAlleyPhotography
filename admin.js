@@ -121,6 +121,55 @@ const state = {
   dragCollectionSlug: "",
 };
 
+function setupSidebarNavigation() {
+  const toggle = document.getElementById("sidebarToggle");
+  const closeBtn = document.getElementById("sidebarCloseBtn");
+  const overlay = document.getElementById("sidebarOverlay");
+  const sidebar = document.getElementById("adminSidebar");
+
+  if (!toggle || !sidebar) return;
+
+  const closeSidebar = () => {
+    document.body.classList.remove("sidebar-open");
+    toggle.setAttribute("aria-expanded", "false");
+    sidebar.setAttribute("inert", "");
+  };
+
+  const openSidebar = () => {
+    document.body.classList.add("sidebar-open");
+    toggle.setAttribute("aria-expanded", "true");
+    sidebar.removeAttribute("inert");
+  };
+
+  toggle.addEventListener("click", () => {
+    const isOpen = document.body.classList.contains("sidebar-open");
+    if (isOpen) closeSidebar();
+    else openSidebar();
+  });
+
+  closeBtn?.addEventListener("click", closeSidebar);
+  overlay?.addEventListener("click", closeSidebar);
+
+  document.querySelectorAll(".admin-nav-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (window.matchMedia("(max-width: 899px)").matches) closeSidebar();
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (!document.body.classList.contains("sidebar-open")) return;
+    closeSidebar();
+    toggle.focus();
+  });
+
+  window.addEventListener("resize", () => {
+    if (!window.matchMedia("(max-width: 899px)").matches) closeSidebar();
+  });
+
+  closeSidebar();
+}
+
 function normalizeHexColor(value, fallback = "#000000") {
   const normalized = (value || "").toString().trim().toUpperCase();
   return HEX_COLOR_PATTERN.test(normalized) ? normalized : fallback;
@@ -625,6 +674,7 @@ async function initializeAdmin() {
   });
 }
 
+setupSidebarNavigation();
 setupTabNavigation();
 setupAppearanceColorControls();
 

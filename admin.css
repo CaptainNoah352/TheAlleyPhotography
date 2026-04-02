@@ -70,12 +70,22 @@ body.admin-auth-loading .admin-auth-loading-indicator {
   background: radial-gradient(ellipse at top left, #faf7f1 0%, var(--admin-bg) 50%, #ede5d8 100%);
   color: var(--admin-text);
   font-family: "Poppins", system-ui, sans-serif;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.admin-page,
+.admin-page * {
+  box-sizing: border-box;
 }
 
 .admin-shell {
   max-width: 1600px;
   margin: 0 auto;
   padding: 1.25rem;
+  width: 100%;
+  min-width: 0;
 }
 
 /* ── Login card ────────────────────────────────────────────── */
@@ -105,6 +115,8 @@ body.admin-auth-loading .admin-auth-loading-indicator {
   grid-template-columns: var(--admin-sidebar-w) minmax(0, 1fr);
   gap: 1.1rem;
   align-items: start;
+  width: 100%;
+  min-width: 0;
 }
 
 /* ── Sidebar ───────────────────────────────────────────────── */
@@ -231,13 +243,19 @@ body.admin-auth-loading .admin-auth-loading-indicator {
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   opacity: 0;
+  pointer-events: none;
   transition: opacity 240ms ease;
+}
+
+body.sidebar-open {
+  overflow: hidden;
 }
 
 /* ── Content shell ─────────────────────────────────────────── */
 .admin-content-shell {
   display: grid;
   gap: 1rem;
+  width: 100%;
   min-width: 0;
 }
 
@@ -300,6 +318,8 @@ body.admin-auth-loading .admin-auth-loading-indicator {
   border-radius: var(--admin-radius);
   box-shadow: var(--admin-shadow);
   padding: 1.4rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .admin-card h2 {
@@ -358,6 +378,9 @@ body.admin-auth-loading .admin-auth-loading-indicator {
   padding: 0.62rem 0.72rem;
   border-radius: var(--admin-radius-sm);
   transition: border-color var(--admin-transition), box-shadow var(--admin-transition);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .admin-form input:focus,
@@ -378,6 +401,12 @@ body.admin-auth-loading .admin-auth-loading-indicator {
   align-items: center;
   gap: 0.5rem !important;
   font-weight: 500 !important;
+}
+
+.check-row input[type="checkbox"] {
+  width: auto;
+  max-width: none;
+  min-width: auto;
 }
 
 .check-group {
@@ -712,6 +741,19 @@ details[open] > .subsection-summary::after {
   gap: 0.55rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
+  min-width: 0;
+}
+
+.admin-inline-form > * {
+  min-width: 0;
+}
+
+.admin-page img,
+.admin-page svg,
+.admin-page video,
+.admin-page canvas,
+.admin-page iframe {
+  max-width: 100%;
 }
 
 /* ── Appearance — color controls ───────────────────────────── */
@@ -851,7 +893,7 @@ input[type="color"] {
 
   .admin-card {
     border-radius: 14px;
-    padding: 1.1rem;
+    padding: 1rem;
   }
 
   .admin-grid-two {
@@ -874,6 +916,11 @@ input[type="color"] {
   .collection-item {
     grid-template-columns: auto 1fr;
     gap: 0.45rem;
+  }
+
+  .check-group {
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem;
   }
 
   .collection-meta { grid-column: 1 / -1; }
@@ -905,7 +952,7 @@ input[type="color"] {
   .admin-table-wrap {
     border: 0;
     border-radius: 0;
-    margin: 0 -1.1rem;
+    margin: 0 -1rem;
   }
 
   .action-stack { flex-direction: column; }
