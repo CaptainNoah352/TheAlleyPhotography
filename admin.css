@@ -22,8 +22,9 @@
   background: var(--surface);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow-soft);
-  padding: 1rem;
-  margin-bottom: 1rem;
+  border-radius: 12px;
+  padding: 1.15rem;
+  margin-bottom: 1.1rem;
 }
 
 .admin-form label {
@@ -45,10 +46,22 @@
 .admin-toolbar input,
 .admin-toolbar select {
   font: inherit;
-  padding: 0.55rem 0.65rem;
+  padding: 0.6rem 0.7rem;
   border: 1px solid var(--section-border);
   background: var(--bg);
   color: var(--text);
+  border-radius: 10px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus,
+.admin-form select:focus,
+.admin-toolbar input:focus,
+.admin-toolbar select:focus {
+  outline: none;
+  border-color: var(--earth);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--earth) 22%, transparent);
 }
 
 .check-row {
@@ -63,11 +76,13 @@
   background: var(--earth);
   color: var(--button-text-on-fill);
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  border-radius: 10px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .admin-btn:hover {
   opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .admin-btn-secondary {
@@ -95,6 +110,32 @@
   display: flex;
   gap: 0.65rem;
   align-items: center;
+  grid-column: 1 / -1;
+}
+
+.admin-card-intro {
+  margin-top: -0.3rem;
+  margin-bottom: 0.9rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.admin-fieldset {
+  grid-column: 1 / -1;
+  border: 1px solid var(--section-border);
+  border-radius: 12px;
+  padding: 0.95rem;
+  margin: 0;
+  background: color-mix(in srgb, var(--bg-soft) 66%, transparent);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.admin-fieldset legend {
+  font-weight: 600;
+  color: var(--text);
+  padding: 0 0.4rem;
 }
 
 .admin-toolbar {
@@ -126,6 +167,10 @@
   padding: 0.6rem;
   border-bottom: 1px solid var(--section-border);
   vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+  background: color-mix(in srgb, var(--bg-soft) 58%, transparent);
 }
 
 .admin-thumb {
