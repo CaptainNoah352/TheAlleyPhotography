@@ -213,6 +213,91 @@
                     </div>
                   </section>
 
+                  <section class="subsection-card">
+                    <div class="appearance-subsection-header">
+                      <div>
+                        <h3>Site Appearance</h3>
+                        <p class="section-help">Fine-tune global surface, text, icon, and interaction colors.</p>
+                      </div>
+                      <button id="resetAppearanceBtn" class="admin-btn admin-btn-secondary" type="button">Reset appearance defaults</button>
+                    </div>
+                    <p id="appearanceContrastWarning" class="appearance-contrast-warning" hidden></p>
+                    <div class="appearance-color-grid">
+                      <div class="appearance-color-row">
+                        <label for="setting_site_bg">Site background color</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_site_bg_picker" type="color" value="#ffffff" />
+                          <input id="setting_site_bg" type="text" inputmode="text" placeholder="#FFFFFF" />
+                          <span id="setting_site_bg_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      <div class="appearance-color-row">
+                        <label for="setting_header_bg">Header background color</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_header_bg_picker" type="color" value="#ffffff" />
+                          <input id="setting_header_bg" type="text" inputmode="text" placeholder="#FFFFFF" />
+                          <span id="setting_header_bg_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      <div class="appearance-color-row">
+                        <label for="setting_header_text">Header text color</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_header_text_picker" type="color" value="#2f2923" />
+                          <input id="setting_header_text" type="text" inputmode="text" placeholder="#2F2923" />
+                          <span id="setting_header_text_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      <div class="appearance-color-row">
+                        <label for="setting_footer_bg">Footer background color</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_footer_bg_picker" type="color" value="#f5f5f5" />
+                          <input id="setting_footer_bg" type="text" inputmode="text" placeholder="#F5F5F5" />
+                          <span id="setting_footer_bg_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      <div class="appearance-color-row">
+                        <label for="setting_footer_text">Footer text color</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_footer_text_picker" type="color" value="#62584d" />
+                          <input id="setting_footer_text" type="text" inputmode="text" placeholder="#62584D" />
+                          <span id="setting_footer_text_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      <div class="appearance-color-row">
+                        <label for="setting_nav_icon">Navigation/menu icon color</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_nav_icon_picker" type="color" value="#4e5848" />
+                          <input id="setting_nav_icon" type="text" inputmode="text" placeholder="#4E5848" />
+                          <span id="setting_nav_icon_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      <div class="appearance-color-row">
+                        <label for="setting_body_text">Body text color</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_body_text_picker" type="color" value="#2f2923" />
+                          <input id="setting_body_text" type="text" inputmode="text" placeholder="#2F2923" />
+                          <span id="setting_body_text_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      <div class="appearance-color-row">
+                        <label for="setting_filter_icon">Filter icon/button color</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_filter_icon_picker" type="color" value="#5f6f52" />
+                          <input id="setting_filter_icon" type="text" inputmode="text" placeholder="#5F6F52" />
+                          <span id="setting_filter_icon_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                      <div class="appearance-color-row">
+                        <label for="setting_accent_color">Accent color (links/buttons/active states)</label>
+                        <div class="appearance-color-inputs">
+                          <input id="setting_accent_color_picker" type="color" value="#8a6442" />
+                          <input id="setting_accent_color" type="text" inputmode="text" placeholder="#8A6442" />
+                          <span id="setting_accent_color_swatch" class="color-swatch" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
                   <div class="admin-form-actions"><button class="admin-btn" type="submit">Save Appearance</button></div>
                 </form>
               </article>

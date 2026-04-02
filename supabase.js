@@ -44,6 +44,15 @@
     lightbox_show_captions: "true",
     lightbox_show_counter: "true",
     lightbox_bg_opacity: "1",
+    site_bg: "#FFFFFF",
+    header_bg: "#FFFFFF",
+    header_text: "#2F2923",
+    footer_bg: "#F5F5F5",
+    footer_text: "#62584D",
+    nav_icon: "#4E5848",
+    body_text: "#2F2923",
+    filter_icon: "#5F6F52",
+    accent_color: "#8A6442",
   };
 
   let client = null;

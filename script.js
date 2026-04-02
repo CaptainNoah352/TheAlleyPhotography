@@ -56,6 +56,17 @@ const state = {
 
 const CONTROL_HIDE_DELAY_MS = 1500;
 const DEFAULT_THEME_SETTINGS = { primary: "#5f6f52", accent: "#8a6442" };
+const DEFAULT_APPEARANCE_SETTINGS = {
+  site_bg: "#FFFFFF",
+  header_bg: "#FFFFFF",
+  header_text: "#2F2923",
+  footer_bg: "#F5F5F5",
+  footer_text: "#62584D",
+  body_text: "#2F2923",
+  nav_icon: "#4E5848",
+  filter_icon: "#5F6F52",
+  accent_color: "#8A6442",
+};
 const EMPTY_GALLERY_MESSAGES = {
   home: "No photos published yet. Add published photos with 'Show on Home' enabled to populate this section.",
   portfolio: "No photos published yet. Publish photos in admin to populate the portfolio.",
@@ -326,13 +337,35 @@ function setLinkWithEmptyState(node, url, label, fallbackText) {
 }
 
 function applySiteTheme(settings = {}) {
+  const accent = normalizeHexColor(settings.accent_color, normalizeHexColor(settings.theme_accent_color, DEFAULT_THEME_SETTINGS.accent));
   document.documentElement.style.setProperty("--color-primary", normalizeHexColor(settings.theme_primary_color, DEFAULT_THEME_SETTINGS.primary));
-  document.documentElement.style.setProperty("--color-accent", normalizeHexColor(settings.theme_accent_color, DEFAULT_THEME_SETTINGS.accent));
+  document.documentElement.style.setProperty("--color-accent", accent);
+  document.documentElement.style.setProperty("--accent-color", accent);
 }
 
 function applyAppearanceSettings(settings = {}) {
   state.activeAppearanceSettings = settings || {};
   const root = document.documentElement;
+  const siteBg = normalizeHexColor(settings.site_bg, DEFAULT_APPEARANCE_SETTINGS.site_bg);
+  const headerBg = normalizeHexColor(settings.header_bg, DEFAULT_APPEARANCE_SETTINGS.header_bg);
+  const headerText = normalizeHexColor(settings.header_text, DEFAULT_APPEARANCE_SETTINGS.header_text);
+  const footerBg = normalizeHexColor(settings.footer_bg, DEFAULT_APPEARANCE_SETTINGS.footer_bg);
+  const footerText = normalizeHexColor(settings.footer_text, DEFAULT_APPEARANCE_SETTINGS.footer_text);
+  const bodyText = normalizeHexColor(settings.body_text, DEFAULT_APPEARANCE_SETTINGS.body_text);
+  const navIcon = normalizeHexColor(settings.nav_icon, DEFAULT_APPEARANCE_SETTINGS.nav_icon);
+  const filterIcon = normalizeHexColor(settings.filter_icon, DEFAULT_APPEARANCE_SETTINGS.filter_icon);
+  const accentColor = normalizeHexColor(settings.accent_color, normalizeHexColor(settings.theme_accent_color, DEFAULT_APPEARANCE_SETTINGS.accent_color));
+
+  root.style.setProperty("--site-bg", siteBg);
+  root.style.setProperty("--header-bg", headerBg);
+  root.style.setProperty("--header-text", headerText);
+  root.style.setProperty("--footer-bg", footerBg);
+  root.style.setProperty("--footer-text", footerText);
+  root.style.setProperty("--body-text", bodyText);
+  root.style.setProperty("--nav-icon", navIcon);
+  root.style.setProperty("--filter-icon", filterIcon);
+  root.style.setProperty("--accent-color", accentColor);
+  root.style.setProperty("--color-accent", accentColor);
 
   root.style.setProperty("--gallery-columns-desktop", String(Math.min(6, Math.max(2, Number(settings.desktop_columns || 3)))));
   root.style.setProperty("--gallery-columns-mobile", String(Math.min(4, Math.max(1, Number(settings.mobile_columns || 2)))));
