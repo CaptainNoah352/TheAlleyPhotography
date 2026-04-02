@@ -16,6 +16,7 @@ const lightboxNextZone = document.getElementById("lightboxNextZone");
 const lightboxFigure = document.getElementById("lightboxFigure");
 
 const siteContentNodes = {
+  siteTitleLogo: document.getElementById("siteTitleLogo"),
   aboutIntro: document.getElementById("aboutIntro"),
   aboutParagraph1: document.getElementById("aboutParagraph1"),
   aboutParagraph2: document.getElementById("aboutParagraph2"),
@@ -167,6 +168,8 @@ let hasAlignedInitialHash = false;
 
 
 let availableLightboxItems = [];
+let siteCollections = [];
+let activeAppearanceSettings = {};
 let currentLightboxPosition = 0;
 let lightboxUiVisible = true;
 let hideUiTimeoutId = null;
@@ -267,14 +270,48 @@ function normalizeHexColor(value, fallback) {
 }
 
 function applySiteTheme(settings = {}) {
-  document.documentElement.style.setProperty(
-    "--color-primary",
-    normalizeHexColor(settings.theme_primary_color, DEFAULT_THEME_SETTINGS.primary)
-  );
-  document.documentElement.style.setProperty(
-    "--color-accent",
-    normalizeHexColor(settings.theme_accent_color, DEFAULT_THEME_SETTINGS.accent)
-  );
+  document.documentElement.style.setProperty("--color-primary", normalizeHexColor(settings.theme_primary_color, DEFAULT_THEME_SETTINGS.primary));
+  document.documentElement.style.setProperty("--color-accent", normalizeHexColor(settings.theme_accent_color, DEFAULT_THEME_SETTINGS.accent));
+}
+
+function applyAppearanceSettings(settings = {}) {
+  activeAppearanceSettings = settings || {};
+  const root = document.documentElement;
+  root.style.setProperty("--gallery-columns-desktop", String(Math.min(6, Math.max(2, Number(settings.desktop_columns || 3)))));
+  root.style.setProperty("--gallery-columns-mobile", String(Math.min(4, Math.max(1, Number(settings.mobile_columns || 2)))));
+  root.style.setProperty("--gallery-gap-desktop", `${Math.min(60, Math.max(0, Number(settings.desktop_grid_gap || 28)))}px`);
+  root.style.setProperty("--gallery-gap-mobile", `${Math.min(30, Math.max(0, Number(settings.mobile_grid_gap || 8)))}px`);
+  root.style.setProperty("--lightbox-overlay-opacity", String(Math.min(1, Math.max(0.4, Number(settings.lightbox_bg_opacity || 1)))));
+
+  const headingFont = (settings.heading_font || "Poppins").trim();
+  const bodyFont = (settings.body_font || "Poppins").trim();
+  root.style.setProperty("--font-heading", `"${headingFont}", Arial, sans-serif`);
+  root.style.setProperty("--font-body", `"${bodyFont}", Arial, sans-serif`);
+
+  const title = (settings.site_title || "").trim();
+  if (title) {
+    if (siteContentNodes.siteTitleLogo) siteContentNodes.siteTitleLogo.textContent = title;
+    if (pageType === "home") document.title = (settings.seo_title || `${title} | Photographer`).trim();
+    if (pageType === "portfolio") document.title = `Portfolio | ${title}`;
+  }
+
+  const description = (settings.seo_description || "").trim();
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (description && metaDescription) metaDescription.setAttribute("content", description);
+
+  const mode = (settings.dark_mode_behavior || "system").trim();
+  document.body.dataset.themeMode = mode;
+  document.body.dataset.headerLayout = (settings.header_layout || "centered").trim();
+
+  const keepRatios = String(settings.keep_original_ratio || "true") === "true";
+  if (gallery) gallery.classList.toggle("gallery-fixed-ratio", !keepRatios);
+
+  if (lightbox) {
+    lightbox.dataset.showArrows = String(settings.lightbox_show_arrows || "true");
+    lightbox.dataset.arrowPosition = (settings.lightbox_arrow_position || "edges").trim();
+    lightbox.dataset.showCaptions = String(settings.lightbox_show_captions || "true");
+    lightbox.dataset.showCounter = String(settings.lightbox_show_counter || "true");
+  }
 }
 
 function setTextContentWithEmptyState(node, value, fallbackText) {
@@ -381,8 +418,12 @@ function updateLightboxView(direction = "next") {
   animateLightboxImage(direction);
   lightboxImage.src = activeImage.src;
   lightboxImage.alt = activeImage.alt || "Gallery image";
-  lightboxCaption.textContent = activeImage.alt || "";
-  lightboxCounter.textContent = `${currentLightboxPosition + 1} / ${availableLightboxItems.length}`;
+  const showCaption = lightbox?.dataset.showCaptions !== "false";
+  const showCounter = lightbox?.dataset.showCounter !== "false";
+  lightboxCaption.textContent = showCaption ? (activeImage.alt || "") : "";
+  lightboxCaption.style.display = showCaption ? "block" : "none";
+  lightboxCounter.textContent = showCounter ? `${currentLightboxPosition + 1} / ${availableLightboxItems.length}` : "";
+  lightboxCounter.style.display = showCounter ? "block" : "none";
 }
 
 function clearUiHideTimer() {
@@ -644,9 +685,44 @@ function renderForActiveFilter() {
   renderGallery(filteredImages);
 }
 
+function applyPortfolioFiltersFromCollections() {
+  const portfolioFiltersNode = document.getElementById("portfolioFilters");
+  if (!portfolioFiltersNode) return;
+  const visibleCollections = (siteCollections || []).filter((item) => item.show_in_nav !== false);
+  if (!visibleCollections.length) return;
+
+  portfolioFiltersNode.innerHTML = '<button class="portfolio-filter-btn active" type="button" data-filter="all">All</button>';
+  visibleCollections.forEach((collection) => {
+    const button = document.createElement("button");
+    button.className = "portfolio-filter-btn";
+    button.type = "button";
+    button.dataset.filter = collection.slug;
+    button.textContent = collection.name;
+    portfolioFiltersNode.appendChild(button);
+  });
+
+  portfolioFiltersNode.querySelectorAll(".portfolio-filter-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      portfolioFiltersNode.querySelectorAll(".portfolio-filter-btn").forEach((node) => node.classList.toggle("active", node === button));
+      renderForActiveFilter();
+    });
+  });
+}
+
+async function loadCollectionsForSite() {
+  if (!window.photoDataApi?.fetchCollections) return;
+  try {
+    siteCollections = await window.photoDataApi.fetchCollections();
+    applyPortfolioFiltersFromCollections();
+  } catch (error) {
+    console.warn("[gallery] fetchCollections failed. Falling back to static filters.", error);
+  }
+}
+
 function applySiteSettingsToHome(settings) {
   if (!settings) return;
-  setTextContentWithEmptyState(siteContentNodes.aboutIntro, settings.about_intro, EMPTY_SITE_COPY.about_intro);
+  if (siteContentNodes.siteTitleLogo && settings.site_title) siteContentNodes.siteTitleLogo.textContent = settings.site_title;
+  setTextContentWithEmptyState(siteContentNodes.aboutIntro, settings.site_intro_text || settings.about_intro, EMPTY_SITE_COPY.about_intro);
   setTextContentWithEmptyState(siteContentNodes.aboutParagraph1, settings.about_paragraph_1, EMPTY_SITE_COPY.about_paragraph_1);
   setTextContentWithEmptyState(siteContentNodes.aboutParagraph2, settings.about_paragraph_2, EMPTY_SITE_COPY.about_paragraph_2);
   setTextContentWithEmptyState(siteContentNodes.aboutPullquote, settings.about_pullquote, EMPTY_SITE_COPY.about_pullquote);
@@ -704,12 +780,12 @@ async function loadSiteSettingsForSite() {
   try {
     const settings = await window.photoDataApi.fetchSiteSettings();
     applySiteTheme(settings);
-    if (pageType === "home") {
-      applySiteSettingsToHome(settings);
-    }
+    applyAppearanceSettings(settings);
+    if (pageType === "home") applySiteSettingsToHome(settings);
   } catch (error) {
     console.warn("[gallery] fetchSiteSettings failed. Using static content defaults.", error);
     applySiteTheme({});
+    applyAppearanceSettings({});
   }
 }
 
@@ -741,6 +817,41 @@ async function loadGalleryFromSupabase() {
   }
 }
 
+
+function applyPortfolioFiltersFromCollections() {
+  const portfolioFiltersNode = document.getElementById("portfolioFilters");
+  if (!portfolioFiltersNode) return;
+  const visibleCollections = (siteCollections || []).filter((item) => item.show_in_nav !== false);
+  if (!visibleCollections.length) return;
+
+  portfolioFiltersNode.innerHTML = '<button class="portfolio-filter-btn active" type="button" data-filter="all">All</button>';
+  visibleCollections.forEach((collection) => {
+    const button = document.createElement("button");
+    button.className = "portfolio-filter-btn";
+    button.type = "button";
+    button.dataset.filter = collection.slug;
+    button.textContent = collection.name;
+    portfolioFiltersNode.appendChild(button);
+  });
+
+  portfolioFiltersNode.querySelectorAll(".portfolio-filter-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      portfolioFiltersNode.querySelectorAll(".portfolio-filter-btn").forEach((node) => node.classList.toggle("active", node === button));
+      renderForActiveFilter();
+    });
+  });
+}
+
+async function loadCollectionsForSite() {
+  if (!window.photoDataApi?.fetchCollections) return;
+  try {
+    siteCollections = await window.photoDataApi.fetchCollections();
+    applyPortfolioFiltersFromCollections();
+  } catch (error) {
+    console.warn("[gallery] fetchCollections failed. Falling back to static filters.", error);
+  }
+}
+
 const portfolioFilters = document.getElementById("portfolioFilters");
 
 if (portfolioFilters) {
@@ -756,6 +867,7 @@ if (portfolioFilters) {
 
 (async function initializeGallery() {
   await loadSiteSettingsForSite();
+  await loadCollectionsForSite();
 
   try {
     await loadGalleryFromSupabase();
