@@ -17,6 +17,8 @@ const cloudinaryFile = document.getElementById("cloudinaryFile");
 const cloudinaryCloudName = document.getElementById("cloudinaryCloudName");
 const cloudinaryUploadPreset = document.getElementById("cloudinaryUploadPreset");
 const siteContentForm = document.getElementById("siteContentForm");
+const DEFAULT_CLOUDINARY_CLOUD_NAME = "dkcve5kju";
+const DEFAULT_CLOUDINARY_UPLOAD_PRESET = "wgbwc0lj";
 
 const fields = {
   id: document.getElementById("photoId"),
@@ -68,6 +70,8 @@ function setAuthUi(session) {
 function resetForm() {
   if (!photoForm) return;
   photoForm.reset();
+  if (cloudinaryCloudName && !cloudinaryCloudName.value.trim()) cloudinaryCloudName.value = DEFAULT_CLOUDINARY_CLOUD_NAME;
+  if (cloudinaryUploadPreset && !cloudinaryUploadPreset.value.trim()) cloudinaryUploadPreset.value = DEFAULT_CLOUDINARY_UPLOAD_PRESET;
   fields.id.value = "";
   fields.sortOrder.value = "0";
   fields.isPublished.checked = true;
@@ -247,6 +251,9 @@ async function uploadToCloudinary() {
 }
 
 async function initializeAdmin() {
+  if (cloudinaryCloudName && !cloudinaryCloudName.value.trim()) cloudinaryCloudName.value = DEFAULT_CLOUDINARY_CLOUD_NAME;
+  if (cloudinaryUploadPreset && !cloudinaryUploadPreset.value.trim()) cloudinaryUploadPreset.value = DEFAULT_CLOUDINARY_UPLOAD_PRESET;
+
   if (!window.photoDataApi?.hasValidSupabaseConfig || !window.photoDataApi.hasValidSupabaseConfig()) {
     showMessage("Add your Supabase URL and anon key in supabase-config.js before using admin.", "error");
     return;
