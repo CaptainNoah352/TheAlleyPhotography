@@ -13,27 +13,39 @@
   --sage: var(--color-primary);
   --olive-light: #c7cfbe;
   --earth: var(--color-accent);
-  --terracotta: #9c7a61;
+  --terracotta: color-mix(in srgb, var(--color-accent) 72%, #ffffff 28%);
   --text: var(--color-text);
   --muted: #62584d;
   --shadow: 0 12px 28px rgba(76, 58, 42, 0.1);
   --header-bg: rgba(255, 255, 255, 0.96);
-  --header-border: rgba(138, 100, 66, 0.14);
+  --header-border: color-mix(in srgb, var(--color-accent) 18%, transparent);
   --logo-text: #000000;
   --overlay-bg: rgba(255, 255, 255, 0.82);
   --menu-close-color: #000000;
   --mobile-nav-text: #000000;
   --gallery-hover-shadow: 0 16px 28px rgba(77, 62, 48, 0.14);
-  --gallery-overlay: linear-gradient(to top, rgba(214, 167, 122, 0.13), transparent 35%);
+  --gallery-overlay: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-accent) 24%, transparent),
+    transparent 35%
+  );
   --about-hero-bg: linear-gradient(135deg, var(--bg-soft) 0%, #ece6df 100%);
-  --section-border: rgba(138, 100, 66, 0.12);
-  --card-border: rgba(138, 100, 66, 0.1);
+  --section-border: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  --card-border: color-mix(in srgb, var(--color-accent) 12%, transparent);
   --card-shadow-soft: 0 4px 16px rgba(76, 58, 42, 0.06);
-  --quote-bg: linear-gradient(135deg, rgba(180, 112, 77, 0.06), transparent);
-  --icon-chip-bg: linear-gradient(135deg, rgba(180, 112, 77, 0.1), rgba(95, 111, 82, 0.1));
+  --quote-bg: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 14%, transparent),
+    transparent
+  );
+  --icon-chip-bg: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 18%, transparent),
+    color-mix(in srgb, var(--color-primary) 16%, transparent)
+  );
   --button-text-on-fill: #ffffff;
-  --divider: rgba(138, 100, 66, 0.2);
-  --footer-border: rgba(138, 100, 66, 0.24);
+  --divider: color-mix(in srgb, var(--color-accent) 24%, transparent);
+  --footer-border: color-mix(in srgb, var(--color-accent) 30%, transparent);
   --lightbox-bg: #000000;
   --lightbox-meta-bg: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
   --lightbox-caption: rgba(255, 255, 255, 0.82);
@@ -55,10 +67,10 @@
     --sage: var(--color-primary);
     --olive-light: #687869;
     --earth: var(--color-accent);
-    --terracotta: #c19b7f;
+    --terracotta: color-mix(in srgb, var(--color-accent) 78%, #ffffff 22%);
     --shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
     --header-bg: rgba(13, 14, 16, 0.92);
-    --header-border: rgba(255, 255, 255, 0.1);
+    --header-border: color-mix(in srgb, var(--color-accent) 26%, transparent);
     --logo-text: #f5f2ed;
     --overlay-bg: rgba(13, 14, 16, 0.86);
     --menu-close-color: #f5f2ed;
@@ -66,11 +78,19 @@
     --gallery-hover-shadow: 0 16px 28px rgba(0, 0, 0, 0.42);
     --gallery-overlay: linear-gradient(to top, rgba(255, 255, 255, 0.08), transparent 35%);
     --about-hero-bg: linear-gradient(135deg, #15171a 0%, #111316 100%);
-    --section-border: rgba(255, 255, 255, 0.12);
-    --card-border: rgba(255, 255, 255, 0.12);
+    --section-border: color-mix(in srgb, var(--color-accent) 34%, transparent);
+    --card-border: color-mix(in srgb, var(--color-accent) 30%, transparent);
     --card-shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.3);
-    --quote-bg: linear-gradient(135deg, rgba(215, 154, 115, 0.12), transparent);
-    --icon-chip-bg: linear-gradient(135deg, rgba(215, 154, 115, 0.16), rgba(159, 179, 157, 0.14));
+    --quote-bg: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-accent) 26%, transparent),
+      transparent
+    );
+    --icon-chip-bg: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-accent) 32%, transparent),
+      color-mix(in srgb, var(--color-primary) 24%, transparent)
+    );
     --button-text-on-fill: #0f1013;
     --divider: rgba(255, 255, 255, 0.22);
     --footer-border: rgba(255, 255, 255, 0.18);
@@ -213,6 +233,11 @@ p {
   letter-spacing: -0.46px;
   text-transform: none;
   line-height: 1.2;
+  transition: color 0.2s ease;
+}
+
+.logo:hover {
+  color: var(--color-primary);
 }
 
 /* ── Desktop Nav ── */
@@ -245,6 +270,7 @@ p {
 }
 
 .site-nav a.active {
+  color: var(--color-primary);
   border-bottom-color: var(--color-primary);
 }
 
@@ -275,7 +301,8 @@ p {
 }
 
 .social-icon:hover {
-  opacity: 0.7;
+  color: var(--color-accent);
+  opacity: 1;
 }
 
 /* ── Hamburger Button ── */
@@ -527,7 +554,7 @@ p {
 }
 
 .portfolio-filter-btn {
-  border: 1px solid var(--card-border);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 40%, var(--card-border));
   background: var(--surface);
   color: var(--text);
   padding: 0.55rem 1rem;
@@ -537,8 +564,12 @@ p {
 
 .portfolio-filter-btn.active,
 .portfolio-filter-btn:hover {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary) 88%, #ffffff 12%),
+    color-mix(in srgb, var(--color-accent) 72%, var(--color-primary) 28%)
+  );
+  border-color: color-mix(in srgb, var(--color-accent) 74%, var(--color-primary) 26%);
   color: var(--button-text-on-fill);
 }
 
@@ -579,6 +610,23 @@ p {
   font-size: clamp(2.4rem, 4vw, 3.6rem);
   margin-bottom: 1.2rem;
   color: var(--text);
+  position: relative;
+  padding-bottom: 0.9rem;
+}
+
+.about-hero-inner h2::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 3.8rem;
+  height: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-primary) 86%, transparent),
+    color-mix(in srgb, var(--color-accent) 86%, transparent)
+  );
 }
 
 .about-intro {
@@ -740,11 +788,17 @@ p {
   border: 1px solid var(--color-accent);
   transition: all 0.2s ease;
   display: inline-block;
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
 .contact-link:hover {
-  background: var(--color-accent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 90%, #ffffff 10%),
+    color-mix(in srgb, var(--color-primary) 62%, var(--color-accent) 38%)
+  );
   color: var(--button-text-on-fill);
+  border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-accent) 40%);
 }
 
 .contact-info-bar {
@@ -939,14 +993,14 @@ p {
 }
 
 .lightbox-control {
-  border: 0;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 38%, transparent);
   width: 2rem;
   height: 2rem;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
   color: var(--lightbox-control);
   font-size: 1.18rem;
   font-weight: 200;
@@ -961,6 +1015,8 @@ p {
   transform: scale(1.02);
   opacity: 1;
   color: var(--lightbox-control-hover);
+  border-color: color-mix(in srgb, var(--color-primary) 46%, transparent);
+  background: color-mix(in srgb, var(--color-primary) 24%, transparent);
 }
 
 .lightbox:focus-within .lightbox-control,

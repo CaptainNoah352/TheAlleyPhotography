@@ -119,6 +119,17 @@ document.addEventListener("keydown", (event) => {
 function updateActiveNavLink() {
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".site-nav > a");
+  if (!navLinks.length) return;
+
+  if (pageType === "portfolio") {
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      const isPortfolioLink = href === "portfolio.html" || href.endsWith("/portfolio.html");
+      link.classList.toggle("active", isPortfolioLink);
+    });
+    return;
+  }
+
   let currentId = "";
 
   sections.forEach((section) => {
