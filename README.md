@@ -26,6 +26,22 @@ You can add games directly in the dashboard form:
 3. (Optional) add an emoji icon
 4. Click **Save Game**
 
+### If your games are in other folders on your computer
+
+Browsers cannot reliably load random folders from your computer into this site.
+The most reliable workflow is:
+
+1. Create a `games/` folder in this repo (if it does not exist yet).
+2. Copy each game folder from your computer into `games/`.
+3. In the dashboard, add the entry URL/path to that game's main HTML file.
+
+Examples:
+
+- `games/flappy-bird/index.html`
+- `games/racing/index.html`
+
+Tip: Keep each game's assets (images, js, css, audio) in the same copied folder so relative links keep working.
+
 ## Demo Credentials
 
 - Username: `user`
