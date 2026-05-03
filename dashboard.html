@@ -218,6 +218,7 @@
                         <p>${escapeHtml(game.url)}</p>
                         <div class="card-actions">
                             <button class="btn-card" onclick="playGame('${escapeJs(game.id)}')">Play</button>
+                            <button class="btn-card" onclick="openGamePage('${escapeJs(game.id)}')">Open Page</button>
                             ${game.source === 'manual' ? `<button class="btn-card btn-danger" onclick="removeGame('${escapeJs(game.id)}')">Remove</button>` : '<span class="storage-note">Synced</span>'}
                         </div>
                     </div>
@@ -287,6 +288,15 @@
             document.getElementById('gameTitle').textContent = `Now Playing: ${game.name}`;
             document.getElementById('gameFrame').src = game.url;
             document.getElementById('gameModal').style.display = 'flex';
+        }
+
+        function openGamePage(id) {
+            const game = (window.__gameVaultGames || []).find(item => item.id === id);
+            if (!game) {
+                return;
+            }
+
+            window.open(game.url, '_blank', 'noopener');
         }
 
         function closeGame() {
